@@ -12,7 +12,7 @@ file_counter=3500
 create_vcard() {
     local file_name="$1.vcf"
     local chunk_data="$2"
-    echo -e "$chunk_data" > "parents2024$file_name"
+    echo -e "$chunk_data" > "adm2025feb$file_name"
 }
 
 # Initialize variables to store chunk data
