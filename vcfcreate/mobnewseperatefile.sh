@@ -2,17 +2,17 @@
 
 # Set input file and chunk size
 input_file=$1
-chunk_size=3500
+chunk_size=3000
 
 # Set initial chunk counter and file counter
 chunk_counter=1
-file_counter=3500
+file_counter=3000
 
 # Function to create vCard file
 create_vcard() {
     local file_name="$1.vcf"
     local chunk_data="$2"
-    echo -e "$chunk_data" > "adm2025feb$file_name"
+    echo -e "$chunk_data" > "keem$file_name"
 }
 
 # Initialize variables to store chunk data
@@ -21,7 +21,7 @@ chunk_data=""
 # Read the input file line by line
 while IFS=, read -r name phone_number; do
     # Create vCard data for the current entry
-    vcard_data="BEGIN:VCARD\nVERSION:2.1\nN:;$name.parent;;;\nFN:$name.parent\nTEL;CELL;PREF:$phone_number\nEND:VCARD"
+    vcard_data="BEGIN:VCARD\nVERSION:2.1\nN:;$name.keem25;;;\nFN:$name.keem25\nTEL;CELL;PREF:$phone_number\nEND:VCARD"
 
     # Append vCard data to chunk data
     chunk_data="$chunk_data$vcard_data\n"
@@ -31,7 +31,7 @@ while IFS=, read -r name phone_number; do
         create_vcard $file_counter "$chunk_data"
         chunk_data=""
         ((chunk_counter++))
-        ((file_counter+=3500))
+        ((file_counter+=3000))
     fi
 done < "$input_file"
 

@@ -118,7 +118,7 @@ def send_message_to_contact(contact_name):
         document_input = WebDriverWait(driver, delay).until(
                         EC.presence_of_element_located((By.XPATH, '//input[@accept="image/*,video/mp4,video/3gpp,video/quicktime"]')))
         document_input.send_keys(
-                        "/home/varun/programs/whatsappmessagesend_pc/Keem2025.jpeg")
+                        "/home/varun/programs/whatsappmessagesend_pc/keem_mar_7.jpeg")
         sleep(2)
         # send_button_new = WebDriverWait(driver, delay).until(EC.element_to_be_clickable(
         #                 (By.XPATH, '//div[@title="Type a message"]')))
