@@ -60,7 +60,7 @@ print(style.GREEN + message)
 print("\n" + style.RESET)
 message = quote(message)
 
-contact_file_path = "adm2025_feb_1"  # Update with the path to your contact file
+contact_file_path = "keem2025"  # Update with the path to your contact file
 attachment_path = "/path/to/your/attachment/file.jpg"  # Update with the correct path
 
 
@@ -118,13 +118,21 @@ def send_message_to_contact(contact_name):
         document_input = WebDriverWait(driver, delay).until(
                         EC.presence_of_element_located((By.XPATH, '//input[@accept="image/*,video/mp4,video/3gpp,video/quicktime"]')))
         document_input.send_keys(
-                        "/home/varun/programs/whatsappmessagesend_pc/keem_mar_7.jpeg")
+                        "/home/varun/programs/whatsappmessagesend_pc/KEAM.jpeg")
         sleep(2)
         # send_button_new = WebDriverWait(driver, delay).until(EC.element_to_be_clickable(
         #                 (By.XPATH, '//div[@title="Type a message"]')))
         # send_button_new.send_keys(Keys.ENTER)
-        send_button = WebDriverWait(driver, delay).until(EC.element_to_be_clickable((By.XPATH, '//span[@data-icon="send"]')))
-        send_button.click() 
+        try:
+            # Wait for the send button to be clickable
+            send_button = WebDriverWait(driver, delay).until(
+                EC.element_to_be_clickable((By.XPATH, '//div[@role="button" and @aria-label="Send"]'))
+            )
+            send_button.click()
+            print("Attachment sent successfully.")
+        except Exception as e:
+            print("Failed to click the send button:", e)
+
 
         sleep(10)
         
