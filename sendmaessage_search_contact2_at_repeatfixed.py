@@ -15,57 +15,10 @@ options.add_experimental_option("excludeSwitches", ["enable-logging"])
 options.add_argument("--profile-directory=Default")
 options.add_argument("--user-data-dir=/var/tmp/chrome_user_data")
 
-os.system("")
 os.environ["WDM_LOG_LEVEL"] = "0"
 
-class style():
-    BLACK = '\033[30m'
-    RED = '\033[31m'
-    GREEN = '\033[32m'
-    YELLOW = '\033[33m'
-    BLUE = '\033[34m'
-    MAGENTA = '\033[35m'
-    CYAN = '\033[36m'
-    WHITE = '\033[37m'
-    UNDERLINE = '\033[4m'
-    RESET = '\033[0m'
-
-fout = open("successnumbers", "a")
-
-print(style.BLUE)
-print("**********************************************************")
-print("**********************************************************")
-print("*****                                               ******")
-print("*****  THANK YOU FOR USING WHATSAPP BULK MESSENGER  ******")
-print("*****      This tool was built by Anirudh Bagri     ******")
-print("*****           www.github.com/anirudhbagri         ******")
-print("*****                                               ******")
-print("**********************************************************")
-print("**********************************************************")
-print(style.RESET)
-
-f = open("msg", "r", encoding="utf8")
-successn = open("successnumber", "w")
-message = f.read()
-f.close()
-message2 = ""
-with open("mu") as f2:
-    for i in f2.readlines():
-        message2 += i
-
-f2.close()
-
-print(style.YELLOW + '\nThis is your message-')
-print(style.GREEN + message)
-print("\n" + style.RESET)
-message = quote(message)
-
-contact_file_path = "keem2025"  # Update with the path to your contact file
-attachment_path = "/path/to/your/attachment/file.jpg"  # Update with the correct path
-
-
-total_number = 1  # Since you are sending to a single contact
-
+contact_file_path = "keem2025"
+attachment_path = "/home/varun/programs/whatsappmessagesend_pc/KEAM.jpeg"
 delay = 10
 
 s = Service('./chromedriver')
@@ -73,75 +26,75 @@ driver = webdriver.Chrome(service=s, options=options)
 
 print('Once your browser opens up sign in to web WhatsApp')
 driver.get('https://web.whatsapp.com')
-wait = WebDriverWait(driver, 600)
-input(style.MAGENTA + "After logging into WhatsApp Web is complete and your chats are visible, press ENTER..." + style.RESET)
+WebDriverWait(driver, 600).until(EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="3"]')))
+input("After logging into WhatsApp Web is complete and your chats are visible, press ENTER...")
 
-# Define a function to send a message to a specific contact
 def send_message_to_contact(contact_name):
-    search_box = None  # Initialize search_box outside the try block to make it accessible in the finally block
     try:
-        # Search for the contact
+        # Clear the search box before entering the contact name
         search_box = WebDriverWait(driver, delay).until(
-            EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="3"]')))
-        # Clear the search box using ActionChains
+            EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="3"]'))
+        )
         search_box.clear()
         ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
-        search_box.send_keys(contact_name)
-        search_box.send_keys(Keys.ENTER)
         sleep(1)
+        search_box.send_keys(contact_name.strip())
+        search_box.send_keys(Keys.ENTER)
+        sleep(2)
 
-        # Check if the contact is found
-        contact_not_found = WebDriverWait(driver, delay).until(
-            EC.presence_of_element_located((By.XPATH, '//span[@title="No chats found"]')))
-        if contact_not_found:
-            print(style.RED + f'Contact {contact_name} not found, skipping.' + style.RESET)
-            return  # Skip sending the message if the contact is not found
+        # Check if the contact exists
+        try:
+            WebDriverWait(driver, 3).until(
+                EC.presence_of_element_located((By.XPATH, '//span[@title="No chats found"]'))
+            )
+            print(f"Contact '{contact_name.strip()}' not found, skipping.")
+            return  # Skip this contact if not found
+        except:
+            print(f"Contact '{contact_name.strip()}' found, sending message...")
 
-        # Send message with attachment
+        # Click the attachment button
         attachment_button = WebDriverWait(driver, delay).until(
             EC.element_to_be_clickable((By.XPATH, '//button[@title="Attach" or @aria-label="Attach"]'))
         )
         attachment_button.click()
-        print("Clicked attachment button.")
+        sleep(1)
 
+        # Select the attachment file
         document_input = WebDriverWait(driver, delay).until(
-                        EC.presence_of_element_located((By.XPATH, '//input[@accept="image/*,video/mp4,video/3gpp,video/quicktime"]')))
-        document_input.send_keys("/home/varun/programs/whatsappmessagesend_pc/KEAM.jpeg")
-        sleep(2)
+            EC.presence_of_element_located((By.XPATH, '//input[@accept="image/*,video/mp4,video/3gpp,video/quicktime"]'))
+        )
+        document_input.send_keys(attachment_path)
+        sleep(1)
 
+        # Click the send button
         send_button = WebDriverWait(driver, delay).until(
             EC.element_to_be_clickable((By.XPATH, '//div[@role="button" and @aria-label="Send"]'))
         )
         send_button.click()
-        print("Attachment sent successfully.")
+        print(f"Message sent to: {contact_name.strip()}")
 
-        # Log success
+        # Log the success
         with open("ess", "a+") as success:
-            success.write(contact_name + "\n")
-
-        print(style.GREEN + 'Message sent to: ' + contact_name + style.RESET)
+            success.write(contact_name.strip() + "\n")
 
     except Exception as e:
-        # Log failure if an error occurs
+        print(f"Failed to send message to {contact_name.strip()}: {e}")
+        # Log the failure
         with open("esf", "a+") as failed:
-            failed.write(contact_name + "\n")
-        print(style.RED + 'Failed to send message to ' + contact_name + ': ' + str(e) + style.RESET)
+            failed.write(contact_name.strip() + "\n")
     finally:
-        # Ensure search box is cleared
-        if search_box:
-            ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
+        # Clear the search box for the next contact
+        ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
+        sleep(1)
 
-# Read contact names from the file
+# Read contacts and send messages
 with open(contact_file_path, "r") as contacts_file:
-    
     for i, contact in enumerate(contacts_file.readlines()):
-        if i < 3000:
+        if i < 3648:
             continue
-        print(f"Sending to {i} number")
         if i == 5000:
             break
-        print(style.YELLOW + 'Sending message to ' + contact + '.' + style.RESET)
-        print(contact)
+        print(f"Sending message to {contact.strip()}...")
         send_message_to_contact(contact)
 
 # Close the browser when done

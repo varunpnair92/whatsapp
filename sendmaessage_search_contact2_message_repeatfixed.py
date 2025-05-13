@@ -106,6 +106,18 @@ Helpline Number: 9446741786"""
 
         # Send the modified message
         
+        
+        #checking contact found or not
+        try:
+            WebDriverWait(driver, 3).until(
+                EC.presence_of_element_located((By.XPATH, '//span[@title="No chats found"]'))
+            )
+            print(f"Contact '{contact_name.strip()}' not found, skipping.")
+            return  # Skip this contact if not found
+        except:
+            print(f"Contact '{contact_name.strip()}' found, sending message...")
+        
+        
 
         #attach message
         # Copy message
@@ -115,13 +127,16 @@ Helpline Number: 9446741786"""
         for line in message_text.split("\n"):
             message_box.send_keys(line, Keys.SHIFT, Keys.ENTER)
         message_box.send_keys(Keys.ENTER)
+        
+        
+        
       
         
         
         send_button = WebDriverWait(driver, delay).until(EC.element_to_be_clickable((By.XPATH, '//span[@data-icon="send"]')))
         send_button.click()
 
-        sleep(4)
+        sleep(2)
         
 
         # # Send message with attachment2
@@ -161,7 +176,7 @@ Helpline Number: 9446741786"""
 with open(contact_file_path, "r") as contacts_file:
     
     for i,contact in enumerate(contacts_file.readlines()):
-        if i<17:
+        if i<3:
             continue
         print(f"send to {i} number")
         if i==2500:
