@@ -90,80 +90,41 @@ def send_message_to_contact(contact_name):
         search_box.send_keys(Keys.ENTER)
         sleep(1)
 
+        # Check if the contact is found
+        contact_not_found = WebDriverWait(driver, delay).until(
+            EC.presence_of_element_located((By.XPATH, '//span[@title="No chats found"]')))
+        if contact_not_found:
+            print(style.RED + f'Contact {contact_name} not found, skipping.' + style.RESET)
+            return  # Skip sending the message if the contact is not found
 
-        # #attach message
-        # # Copy message
-        # message_box = WebDriverWait(driver, delay).until(
-        #     EC.presence_of_element_located((By.XPATH, '//div[@title="Type a message"]')))
-        # message_text = message_box.get_attribute("title")
-
-        # # Send the extracted message
-        # message_box.clear()  # Clear existing message, if any
-        # message_box.send_keys("""Dear parent,
-        # FISAT is organising a discussion on "Student's Emotional Wellbeing". Kindly make it convienent to attend the same.\n""")
-
-        
-
-        # Send message with attachment 1
-        #this old methos work upto 22-11-2024
-        # attachment_button = WebDriverWait(driver, delay).until(
-        #     EC.element_to_be_clickable((By.XPATH, '//div[@title="Attach"]')))
-        #new method implemted on 23-11-2024
+        # Send message with attachment
         attachment_button = WebDriverWait(driver, delay).until(
-        EC.element_to_be_clickable((By.XPATH, '//button[@title="Attach" or @aria-label="Attach"]'))
+            EC.element_to_be_clickable((By.XPATH, '//button[@title="Attach" or @aria-label="Attach"]'))
         )
         attachment_button.click()
         print("Clicked attachment button.")
 
         document_input = WebDriverWait(driver, delay).until(
                         EC.presence_of_element_located((By.XPATH, '//input[@accept="image/*,video/mp4,video/3gpp,video/quicktime"]')))
-        document_input.send_keys(
-                        "/home/varun/programs/whatsappmessagesend_pc/KEAM.jpeg")
+        document_input.send_keys("/home/varun/programs/whatsappmessagesend_pc/KEAM.jpeg")
         sleep(2)
-        # send_button_new = WebDriverWait(driver, delay).until(EC.element_to_be_clickable(
-        #                 (By.XPATH, '//div[@title="Type a message"]')))
-        # send_button_new.send_keys(Keys.ENTER)
-        try:
-            # Wait for the send button to be clickable
-            send_button = WebDriverWait(driver, delay).until(
-                EC.element_to_be_clickable((By.XPATH, '//div[@role="button" and @aria-label="Send"]'))
-            )
-            send_button.click()
-            print("Attachment sent successfully.")
-        except Exception as e:
-            print("Failed to click the send button:", e)
 
+        send_button = WebDriverWait(driver, delay).until(
+            EC.element_to_be_clickable((By.XPATH, '//div[@role="button" and @aria-label="Send"]'))
+        )
+        send_button.click()
+        print("Attachment sent successfully.")
 
-        sleep(10)
-        
-
-        # # Send message with attachment2
-        # attachment_button = WebDriverWait(driver, delay).until( 
-        #EC.element_to_be_clickable((By.XPATH, '//div[@title="Attach"]')))
-        #arts ios the best jaikaiiiiisiisiiiiiikgyikfgylcarts is the bst in ktge world is the bewst intg attachment_button.click()
-        # print("Clicked attachment button.")
-
-        # document_input = WebDriverWait(driver, delay).until(
-        #                 EC.presence_of_element_located((By.XPATH, '//input[@accept="image/*,video/mp4,video/3gpp,video/quicktime"]')))
-        # document_input.send_keys(
-        #                 "/home/user/whatsappmessagesend_pc/FISATS2.jpeg")
-        # sleep(1)
-        # send_button_new = WebDriverWait(driver, delay).until(EC.element_to_be_clickable(
-        #                 (By.XPATH, '//div[@title="Type a message"]')))
-        # send_button_new.send_keys(Keys.ENTER)
-        # sleep(2)
-
-
-        success = open("ess", "a+")
-        success.write(contact_name + "\n")
-        success.close()
+        # Log success
+        with open("ess", "a+") as success:
+            success.write(contact_name + "\n")
 
         print(style.GREEN + 'Message sent to: ' + contact_name + style.RESET)
 
     except Exception as e:
-        failed = open("esf", "a+")
-        failed.write(contact_name + "\n")
-        failed.close()
+        # Log failure if an error occurs
+        with open("esf", "a+") as failed:
+            failed.write(contact_name + "\n")
         print(style.RED + 'Failed to send message to ' + contact_name + ': ' + str(e) + style.RESET)
     finally:
         # Ensure search box is cleared
@@ -173,11 +134,11 @@ def send_message_to_contact(contact_name):
 # Read contact names from the file
 with open(contact_file_path, "r") as contacts_file:
     
-    for i,contact in enumerate(contacts_file.readlines()):
-        if i<3000:
+    for i, contact in enumerate(contacts_file.readlines()):
+        if i < 3000:
             continue
-        print(f"send to {i} number")
-        if i==5000:
+        print(f"Sending to {i} number")
+        if i == 5000:
             break
         print(style.YELLOW + 'Sending message to ' + contact + '.' + style.RESET)
         print(contact)
