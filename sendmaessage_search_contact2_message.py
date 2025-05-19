@@ -60,7 +60,7 @@ print(style.GREEN + message)
 print("\n" + style.RESET)
 message = quote(message)
 
-contact_file_path = "cbse2025"  # Update with the path to your contact file
+contact_file_path = "c3"  # Update with the path to your contact file
 attachment_path = "/path/to/your/attachment/file.jpg"  # Update with the correct path
 
 
@@ -90,14 +90,7 @@ def send_message_to_contact(contact_name):
         search_box.send_keys(Keys.ENTER)
         sleep(1)
         multiline_message =[       
-        """Dear applicant,
-Greetings from FISAT! \n
-You are requested to upload the 12th Physics, Chemistry and Math Marks for further processing of your  application for B.Tech programme in FISAT using the  link given below.
-http://btech-admission.fisat.ac.in/markentry
-User ID: Application Number You received in your mail in response to your online application submission ( Starts with T..../BT/2025.
-Password: Your date of Birth:DDMMYYYY OR last 8 digits of the mob number regd with us.  Please submit on or before 16 05 2025.
-Team FISAT.\n
-Helpline Number: 9446741786"""
+        """Dear applicant,\nGreetings from FISAT!\nYou are requested to upload the normalized KEAM score and Session percentile of KEAM 2025 for further processing of your application for B.Tech programme in FISAT using the link given below.\nhttp://btech-admission.fisat.ac.in/markentry \n\nUser ID: Application Number You received in your mail in responseto your online application submission (Starts with T..../BT/2025.\nPassword: Your date of Birth:DDMMYYYY/last 8 digits of the mob number regd with us. Please submit on 22 05  2025.\nTeam FISAT.\n\nHelpline Number: 9446741786"""
         
        
        ]

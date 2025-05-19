@@ -174,10 +174,10 @@ def send_message_to_contact(contact_name):
 with open(contact_file_path, "r") as contacts_file:
     
     for i,contact in enumerate(contacts_file.readlines()):
-        if i<3017:
+        if i<9001:
             continue
         print(f"send to {i} number")
-        if i==5000:
+        if i==12000:
             break
         print(style.YELLOW + 'Sending message to ' + contact + '.' + style.RESET)
         print(contact)
