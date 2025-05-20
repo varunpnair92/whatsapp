@@ -9,27 +9,30 @@ from selenium.webdriver.common.action_chains import ActionChains
 import os
 from time import sleep
 
+# Configure Chrome options
 options = Options()
 options.add_experimental_option("excludeSwitches", ["enable-logging"])
 options.add_argument("--profile-directory=Default")
 options.add_argument("--user-data-dir=/var/tmp/chrome_user_data")
 
+# Start ChromeDriver
 service = Service('./chromedriver')
 driver = webdriver.Chrome(service=service, options=options)
 
+# Print welcome message
 print("\033[34m**********************************************************")
 print("*****  THANK YOU FOR USING WHATSAPP BULK MESSENGER  ******")
-print("*****           www.github.com/anirudhbagri         ******")
+print("*****           www.github.com/varunpnair92        ******")
 print("**********************************************************\033[0m")
 
-# Load student data
+# Load student data from CSV
 student_records = []
-with open("stt.csv", "r") as f:
+with open("student_data_2025.csv", "r") as f:
     for line in f.readlines():
         sdata = line.strip().split(",")
-        if len(sdata) == 4:
-            student_id, name, dob, phone_number = sdata
-            student_records.append((student_id, name, dob, phone_number.strip()))
+        if len(sdata) == 5:
+            student_id, name, dob, password, phone_number = sdata
+            student_records.append((student_id, name, dob.replace("-", ""), password.strip(), phone_number.strip()))
 
 # Open WhatsApp Web
 driver.get('https://web.whatsapp.com')
@@ -38,17 +41,18 @@ WebDriverWait(driver, 600).until(
 )
 input("\033[35mAfter logging into WhatsApp Web is complete and your chats are visible, press ENTER...\033[0m")
 
+# Function to send message to a contact
 def send_message(contact_number):
     try:
-        # Find the student record for this contact
-        student_record = next((rec for rec in student_records if rec[3] == contact_number), None)
+        # Find student record for this contact
+        student_record = next((rec for rec in student_records if rec[4] == contact_number), None)
         if not student_record:
             print(f"\033[31mNo matching student record found for {contact_number}\033[0m")
             return
-        
-        student_id, name, dob, phone_number = student_record
-        
-        # Prepare multiline message as a list of lines
+
+        student_id, name, dob, password, phone_number = student_record
+
+        # Compose personalized message
         personalized_message = [
             f"Dear {name},",
             "Greetings from FISAT!",
@@ -57,48 +61,52 @@ def send_message(contact_number):
             "http://btech-admission.fisat.ac.in/markentry",
             "",
             f"User ID: {student_id}",
-            f"Password: {dob}",
+            f"Password: {dob} or {password}",
             "",
             "Team FISAT.",
             "Helpline Number: 9446741786"
         ]
 
-        # Search for the contact
+        # Search for contact
         search_box = WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="3"]'))
         )
-        search_box.clear()
+        # Clear previous content using ActionChains
+        ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
+        sleep(0.5)
         search_box.send_keys(contact_number)
         sleep(2)
         search_box.send_keys(Keys.ENTER)
-        sleep(2)
-        
-        # Find the message input box
+        sleep(1)
+
+        # Locate message box
         message_box = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][contains(@data-tab, "1")]'))
         )
-        
-        # Send message line by line with SHIFT+ENTER for line breaks
+
+        # Send message with line breaks
         for line in personalized_message:
             message_box.send_keys(line)
             message_box.send_keys(Keys.SHIFT, Keys.ENTER)
-        # Press ENTER to send the message
         message_box.send_keys(Keys.ENTER)
-        
+
         print(f"\033[32mMessage sent to {contact_number}\033[0m")
-        sleep(3)
+        sleep(1)
 
     except Exception as e:
         print(f"\033[31mFailed to send message to {contact_number}: {e}\033[0m")
 
-# Send messages to all contacts
-with open("c3", "r") as contacts_file:
+# Read contact numbers from file and send messages
+with open("cbse2025", "r") as contacts_file:
     for i, contact in enumerate(contacts_file.readlines()):
-        if i == 2500:  # Safety limit to avoid sending too many messages
+        if i < 0:
+            continue
+        if i == 2500:
             break
         contact = contact.strip()
+        print(f"send to {i} number")
         print(f"Sending message to {contact}...")
         send_message(contact)
 
-# Close the browser when done
+# Close the browser
 driver.quit()
