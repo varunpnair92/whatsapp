@@ -71,13 +71,21 @@ def send_message(contact_number):
         search_box = WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="3"]'))
         )
-        # Clear previous content using ActionChains
-        ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
+        # Clear previous search
+        ActionChains(driver).click(search_box).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
         sleep(0.5)
         search_box.send_keys(contact_number)
-        sleep(2)
-        search_box.send_keys(Keys.ENTER)
-        sleep(1)
+        sleep(3)
+
+        # Verify if contact exists in search result
+        try:
+            contact_title = WebDriverWait(driver, 5).until(
+                EC.presence_of_element_located((By.XPATH, f'//span[@title="{contact_number}"]'))
+            )
+            contact_title.click()
+        except:
+            print(f"\033[33mContact {contact_number} not found on WhatsApp. Skipping...\033[0m")
+            return
 
         # Locate message box
         message_box = WebDriverWait(driver, 10).until(

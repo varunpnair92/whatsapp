@@ -32,17 +32,7 @@ class style():
 
 fout = open("successnumbers", "a")
 
-print(style.BLUE)
-print("**********************************************************")
-print("**********************************************************")
-print("*****                                               ******")
-print("*****  THANK YOU FOR USING WHATSAPP BULK MESSENGER  ******")
-print("*****      This tool was built by Anirudh Bagri     ******")
-print("*****           www.github.com/anirudhbagri         ******")
-print("*****                                               ******")
-print("**********************************************************")
-print("**********************************************************")
-print(style.RESET)
+
 
 f = open("msg", "r", encoding="utf8")
 successn = open("successnumber", "w")
@@ -60,7 +50,7 @@ print(style.GREEN + message)
 print("\n" + style.RESET)
 message = quote(message)
 
-contact_file_path = "keem2025"  # Update with the path to your contact file
+contact_file_path = "fisatregjune_parent"  # Update with the path to your contact file
 attachment_path = "/path/to/your/attachment/file.jpg"  # Update with the correct path
 
 
@@ -118,7 +108,7 @@ def send_message_to_contact(contact_name):
         document_input = WebDriverWait(driver, delay).until(
                         EC.presence_of_element_located((By.XPATH, '//input[@accept="image/*,video/mp4,video/3gpp,video/quicktime"]')))
         document_input.send_keys(
-                        "/home/varun/programs/whatsappmessagesend_pc/KEAM.jpeg")
+                        "/home/varun/programs/whatsappmessagesend_pc/FISAT_Reply_letters_to_registraed_students.pdf")
         sleep(2)
         # send_button_new = WebDriverWait(driver, delay).until(EC.element_to_be_clickable(
         #                 (By.XPATH, '//div[@title="Type a message"]')))
@@ -174,10 +164,10 @@ def send_message_to_contact(contact_name):
 with open(contact_file_path, "r") as contacts_file:
     
     for i,contact in enumerate(contacts_file.readlines()):
-        if i<9001:
+        if i<0:
             continue
         print(f"send to {i} number")
-        if i==12000:
+        if i==3000:
             break
         print(style.YELLOW + 'Sending message to ' + contact + '.' + style.RESET)
         print(contact)

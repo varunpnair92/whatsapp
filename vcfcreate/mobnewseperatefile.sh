@@ -12,7 +12,7 @@ file_counter=3000
 create_vcard() {
     local file_name="$1.vcf"
     local chunk_data="$2"
-    echo -e "$chunk_data" > "cbsemay$file_name"
+    echo -e "$chunk_data" > "fisatregparent$file_name"
 }
 
 # Initialize variables to store chunk data

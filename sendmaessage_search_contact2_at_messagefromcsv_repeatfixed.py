@@ -6,7 +6,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.action_chains import ActionChains
-import os
 from time import sleep
 
 # Configure Chrome options
@@ -19,13 +18,13 @@ options.add_argument("--user-data-dir=/var/tmp/chrome_user_data")
 service = Service('./chromedriver')
 driver = webdriver.Chrome(service=service, options=options)
 
-# Print welcome message
+# Welcome message
 print("\033[34m**********************************************************")
 print("*****  THANK YOU FOR USING WHATSAPP BULK MESSENGER  ******")
 print("*****           www.github.com/varunpnair92        ******")
 print("**********************************************************\033[0m")
 
-# Load student data from CSV
+# Load student data
 student_records = []
 with open("student_data_2025.csv", "r") as f:
     for line in f.readlines():
@@ -39,20 +38,18 @@ driver.get('https://web.whatsapp.com')
 WebDriverWait(driver, 600).until(
     EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="3"]'))
 )
-input("\033[35mAfter logging into WhatsApp Web is complete and your chats are visible, press ENTER...\033[0m")
+input("\033[35mAfter logging into WhatsApp Web and your chats are visible, press ENTER to start sending...\033[0m")
 
-# Function to send message to a contact
 def send_message(contact_number):
     try:
-        # Find student record for this contact
+        # Find student record
         student_record = next((rec for rec in student_records if rec[4] == contact_number), None)
         if not student_record:
-            print(f"\033[31mNo matching student record found for {contact_number}. Skipping...\033[0m")
+            print(f"\033[31mNo student record for {contact_number}. Skipping...\033[0m")
             return
 
         student_id, name, dob, password, phone_number = student_record
 
-        # Compose personalized message
         personalized_message = [
             f"Dear {name},",
             "Greetings from FISAT!",
@@ -71,42 +68,59 @@ def send_message(contact_number):
         search_box = WebDriverWait(driver, 20).until(
             EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][@data-tab="3"]'))
         )
-        # Clear previous content using ActionChains
-        ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
+        # Clear previous search
+        ActionChains(driver).click(search_box).key_down(Keys.CONTROL).send_keys("a").key_up(Keys.CONTROL).send_keys(Keys.BACKSPACE).perform()
         sleep(0.5)
+
         search_box.send_keys(contact_number)
         sleep(2)
         search_box.send_keys(Keys.ENTER)
         sleep(1)
 
-        # Locate message box
-        message_box = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][contains(@data-tab, "1")]'))
-        )
+        # Sometimes ENTER opens chat directly, but sometimes need to click first chat option
+        try:
+            first_chat = WebDriverWait(driver, 5).until(
+                EC.element_to_be_clickable((By.XPATH, '//div[@role="option"]'))
+            )
+            first_chat.click()
+            sleep(1)
+        except:
+            pass  # If no chat option or ENTER opened chat, continue
 
-        # Send message with line breaks
+        # Verify message box appeared (contact found)
+        try:
+            message_box = WebDriverWait(driver, 3).until(
+                EC.element_to_be_clickable((By.XPATH, '//div[@contenteditable="true"][@data-tab="10"]'))
+            )
+        except:
+            print(f"\033[33mContact {contact_number} not found or chat not opened. Skipping...\033[0m")
+            return
+
+        # Focus message box and send message
+        message_box.click()
+        sleep(0.5)
         for line in personalized_message:
             message_box.send_keys(line)
-            message_box.send_keys(Keys.SHIFT, Keys.ENTER)
+            ActionChains(driver).key_down(Keys.SHIFT).send_keys(Keys.ENTER).key_up(Keys.SHIFT).perform()
+            sleep(0.1)
         message_box.send_keys(Keys.ENTER)
 
         print(f"\033[32mMessage sent to {contact_number}\033[0m")
-        sleep(3)
+        sleep(1)
 
     except Exception as e:
-        print(f"\033[31mFailed to send message to {contact_number}: {e}\033[0m")
+        print(f"\033[31mError sending to {contact_number}: {e}\033[0m")
 
-# Read contact numbers from file and send messages
+# Read contacts and send messages
 with open("cbse2025", "r") as contacts_file:
     for i, contact in enumerate(contacts_file.readlines()):
-        if i < 1:
+        if i < 153:  # adjust if you want to skip headers or initial rows
             continue
-        if i == 2500:
+        if i == 2500:  # limit number of messages
             break
         contact = contact.strip()
-        print(f"send to {i} number")
-        print(f"Sending message to {contact}...")
+        print(f"Sending message to {contact} ({i})...")
         send_message(contact)
 
-# Close the browser
+# Close browser
 driver.quit()
