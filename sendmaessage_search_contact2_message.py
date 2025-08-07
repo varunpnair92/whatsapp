@@ -60,7 +60,7 @@ print(style.GREEN + message)
 print("\n" + style.RESET)
 message = quote(message)
 
-contact_file_path = "c3"  # Update with the path to your contact file
+contact_file_path = "ei_f"  # Update with the path to your contact file
 attachment_path = "/path/to/your/attachment/file.jpg"  # Update with the correct path
 
 
@@ -90,7 +90,10 @@ def send_message_to_contact(contact_name):
         search_box.send_keys(Keys.ENTER)
         sleep(1)
         multiline_message =[       
-        """Dear applicant,\nGreetings from FISAT!\nYou are requested to upload the normalized KEAM score and Session percentile of KEAM 2025 for further processing of your application for B.Tech programme in FISAT using the link given below.\nhttp://btech-admission.fisat.ac.in/markentry \n\nUser ID: Application Number You received in your mail in responseto your online application submission (Starts with T..../BT/2025.\nPassword: Your date of Birth:DDMMYYYY/last 8 digits of the mob number regd with us. Please submit on 22 05  2025.\nTeam FISAT.\n\nHelpline Number: 9446741786"""
+        """
+        2nd Phase Allotment List Puublished\nImportant Notice for Government Merit Quota Students\nAll students admitted under the Government Merit Quota are required to report to the college on\nSunday(03/08/2025) at 1:00 PM.\n\nPlease watch the provided video carefully and follow all the instructions exactly as shown.\n\nhttps://fisat.ac.in/video
+        
+        """
         
        
        ]
@@ -154,10 +157,10 @@ def send_message_to_contact(contact_name):
 with open(contact_file_path, "r") as contacts_file:
     
     for i,contact in enumerate(contacts_file.readlines()):
-        if i<17:
+        if i<0:
             continue
         print(f"send to {i} number")
-        if i==2500:
+        if i==5000:
             break
         print(style.YELLOW + 'Sending message to ' + contact + '.' + style.RESET)
         print(contact)
