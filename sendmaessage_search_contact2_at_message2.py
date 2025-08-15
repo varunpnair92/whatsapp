@@ -91,65 +91,43 @@ def send_message_to_contact(contact_name):
         sleep(1)
 
 
-
-        multiline_message =[       
-        """
-        Please fill the form below \n\n
-        
-        https://forms.gle/hXjApKBvm1t7noBL8  
-        """
-        
-       
-       ]
-        # Join the message lines with new lines
-        message_text = "\n".join(multiline_message)
-
-        # Send the modified message
-        
-
         #attach message
         # Copy message
         # Type the message into the message input box
         message_box = WebDriverWait(driver, delay).until(
         EC.presence_of_element_located((By.XPATH, '//div[@contenteditable="true"][contains(@data-tab, "1")]')))
-        for line in message_text.split("\n"):
-            message_box.send_keys(line, Keys.SHIFT, Keys.ENTER)
-        #message_box.send_keys(Keys.ENTER)
-      
+        message_box.send_keys("""Dear parent,
+        FISAT is organising a discussion on "Student's Emotional Wellbeing". Kindly make it convenient to attend the same.\n""")
+
+
         
         
         
         
         
-        sleep(2)
+
+        # Send message with attachment 1
         attachment_button = WebDriverWait(driver, delay).until(
-        EC.element_to_be_clickable((By.XPATH, '//button[@title="Attach" or @aria-label="Attach"]'))
-        )
+            EC.element_to_be_clickable((By.XPATH, '//div[@title="Attach"]')))
         attachment_button.click()
         print("Clicked attachment button.")
 
         document_input = WebDriverWait(driver, delay).until(
                         EC.presence_of_element_located((By.XPATH, '//input[@accept="image/*,video/mp4,video/3gpp,video/quicktime"]')))
         document_input.send_keys(
-                        "/home/varun/programs/whatsappmessagesend_pc/VIDYARAMBHAM 2025.pdf")
+                        "/home/varun/programs/whatsappmessagesend_pc/BusRouteTiming.pdf")
         sleep(2)
+        #now not working so change to click send icon
         # send_button_new = WebDriverWait(driver, delay).until(EC.element_to_be_clickable(
         #                 (By.XPATH, '//div[@title="Type a message"]')))
         # send_button_new.send_keys(Keys.ENTER)
-        try:
-            # Wait for the send button to be clickable
-            send_button = WebDriverWait(driver, delay).until(
-                EC.element_to_be_clickable((By.XPATH, '//div[@role="button" and @aria-label="Send"]'))
-            )
-            send_button.click()
-            print("Attachment sent successfully.")
-        except Exception as e:
-            print("Failed to click the send button:", e)
         
-
+        # Locate the caption element
+        # Locate the caption element
         
         
-        
+        send_button = WebDriverWait(driver, delay).until(EC.element_to_be_clickable((By.XPATH, '//span[@data-icon="send"]')))
+        send_button.click()
 
         sleep(5)
         

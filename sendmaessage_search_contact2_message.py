@@ -60,7 +60,7 @@ print(style.GREEN + message)
 print("\n" + style.RESET)
 message = quote(message)
 
-contact_file_path = "ei_f"  # Update with the path to your contact file
+contact_file_path = "p3_14"  # Update with the path to your contact file
 attachment_path = "/path/to/your/attachment/file.jpg"  # Update with the correct path
 
 
@@ -91,8 +91,8 @@ def send_message_to_contact(contact_name):
         sleep(1)
         multiline_message =[       
         """
-        2nd Phase Allotment List Puublished\nImportant Notice for Government Merit Quota Students\nAll students admitted under the Government Merit Quota are required to report to the college on\nSunday(03/08/2025) at 1:00 PM.\n\nPlease watch the provided video carefully and follow all the instructions exactly as shown.\n\nhttps://fisat.ac.in/video
-        
+        Dear candidate,
+        Students who are admitted in FISAT from second  phase allotment list and in third allotment if they are allotted higher option or category change in FISAT ITSELF need not report agian       
         """
         
        
@@ -117,7 +117,7 @@ def send_message_to_contact(contact_name):
         send_button = WebDriverWait(driver, delay).until(EC.element_to_be_clickable((By.XPATH, '//span[@data-icon="send"]')))
         send_button.click()
 
-        sleep(4)
+        sleep(15)
         
 
         # # Send message with attachment2

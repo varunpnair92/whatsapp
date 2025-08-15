@@ -50,7 +50,7 @@ print(style.GREEN + message)
 print("\n" + style.RESET)
 message = quote(message)
 
-contact_file_path = "ociaug"  # Update with the path to your contact file
+contact_file_path = "fisatallmathews2025"  # Update with the path to your contact file
 attachment_path = "/path/to/your/attachment/file.jpg"  # Update with the correct path
 
 
@@ -108,7 +108,7 @@ def send_message_to_contact(contact_name):
         document_input = WebDriverWait(driver, delay).until(
                         EC.presence_of_element_located((By.XPATH, '//input[@accept="image/*,video/mp4,video/3gpp,video/quicktime"]')))
         document_input.send_keys(
-                        "/home/varun/programs/whatsappmessagesend_pc/Reply_letter.pdf")
+                        "/home/varun/programs/whatsappmessagesend_pc/VIDYARAMBHAM 2025.pdf")
         sleep(2)
         # send_button_new = WebDriverWait(driver, delay).until(EC.element_to_be_clickable(
         #                 (By.XPATH, '//div[@title="Type a message"]')))
@@ -124,7 +124,7 @@ def send_message_to_contact(contact_name):
             print("Failed to click the send button:", e)
 
 
-        sleep(10)
+        sleep(15)
         
 
         # # Send message with attachment2
@@ -164,7 +164,7 @@ def send_message_to_contact(contact_name):
 with open(contact_file_path, "r") as contacts_file:
     
     for i,contact in enumerate(contacts_file.readlines()):
-        if i<440:
+        if i<561:
             continue
         print(f"send to {i} number")
         if i==3000:
