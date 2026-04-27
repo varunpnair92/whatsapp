@@ -10,7 +10,7 @@ from time import sleep
 import os
 
 # ================= CONFIG =================
-CONTACT_FILE = "c3"
+CONTACT_FILE = "fisat_reg_apr_2026"
 MESSAGE_FILE = "msg"
 ATTACHMENT_PATH = "/Users/varun/programs/whatsapp/fcfs.jpeg"
 CHROME_PROFILE = "/var/tmp/chrome_user_data"
@@ -182,7 +182,8 @@ with open(CONTACT_FILE, "r") as f:
 for i, contact in enumerate(contacts):
     contact = contact.strip()
     if not contact: continue
-
+    if i < 48:
+        continue    
     print(f"\n===== {i+1}: {contact} =====")
     if search_contact(contact) or open_unsaved_number(contact):
         send_message()
